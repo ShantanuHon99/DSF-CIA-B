@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dictionary</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="heading">Dictionary</h1>
+    <label for="wordInput" style="font-size: 20px">Enter a word:</label>
+    <input type="text" id="wordInput" placeholder="Enter a word">
+    <button onclick="getWordMeaning()">Get Meaning</button>
+    <p id="meaningDisplay"></p>
+</div>
+<script>
+    function getWordMeaning() {
+        let word = document.getElementById("wordInput").value.trim();
+        word = encodeURIComponent(word);
+
+        fetch(`http://localhost:8080/dictionary/meaning/${word}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById("meaningDisplay").innerText = data;
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                document.getElementById("meaningDisplay").innerText = 'Meaning retrieval failed';
+            });
+    }
+</script>
+</body>
+</html>
